@@ -15,6 +15,7 @@ public:
 	float testIntersection(glm::vec3 eye, glm::vec3 dir);
 	glm::vec3 getNormal(glm::vec3 eye, glm::vec3 dir);
 	glm::vec2 getTextureCoords(glm::vec3 eye, glm::vec3 dir);
+   inline float getParameterVal(glm::mat3 parameter, const float A_determinant); 
 
 private:
 	//the points in 3d space that define the triangle
