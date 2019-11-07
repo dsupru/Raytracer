@@ -15,12 +15,13 @@ float sphere::testIntersection(glm::vec3 eye, glm::vec3 dir)
 	//see the book for a description of how to use the quadratic rule to solve
 	//for the intersection(s) of a line and a sphere, implement it here and
 	//return the minimum positive distance or 9999999 if none
+   float resultingD;
    auto discriminant = pow(glm::dot(dir, (eye - this->center)), 2)
       - glm::dot(dir, dir)*(glm::dot(eye - this->center, eye - this->center)
             - pow(this->radius, 2));
 
    if (discriminant <= 0) {
-      return 9999999;
+      resultingD = 9999999;
    } else {
       auto sqrt_discriminant = sqrt(discriminant);
       auto denom = glm::dot(dir, dir);
@@ -29,20 +30,21 @@ float sphere::testIntersection(glm::vec3 eye, glm::vec3 dir)
       auto t_2 = (neg_b - sqrt_discriminant) / denom;
       // if both positive, return lowest
       if (t_1 >= 0 && t_2 >= 0) {
-         return (t_1 < t_2 ? t_1 : t_2);
-      }
-
+         resultingD = (t_1 < t_2 ? t_1 : t_2);
       // if one negative, return the positive one
-      if (t_1 < 0) {
+      } else if (t_1 < 0) {
          if (t_2 >= 0) {
-            return t_2;
+            resultingD = t_2;
          } else {
-            return 9999999;
+            // both negative
+            resultingD = 9999999;
          }
       } else {
-         return t_1;
+         // t_1 is positive, t_2 negative
+         resultingD = t_1;
       }
    }
+   return resultingD;
 }
 
 glm::vec3 sphere::getNormal(glm::vec3 eye, glm::vec3 dir)
