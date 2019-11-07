@@ -36,16 +36,14 @@ include_directories(Vendor/assimp/include/
                     Vendor/glad/include/
                     Vendor/glfw/include/
                     Vendor/glm/
-                    Vendor/stb/)
+                    Vendor/stb/
+                    "/usr/local/include"
+                    "/usr/local/opt/llvm/include")
+link_directories(
+   "/usr/local/lib"
+   "/usr/local/opt/llvm/lib"
+   )
 
-find_package(OpenMP)
-if (OPENMP_FOUND)
-    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-else()
-   message(FATAL_ERROR "OpenMP library not found")
-endif()
-                    
                     
 foreach(PROJECT ${PROJECTS})
 
