@@ -1,4 +1,5 @@
 #include "sphere.h"
+#include <math.h>
 
 //constructor given  center, radius, and material
 sphere::sphere(glm::vec3 c, float r, int m, scene* s) : rtObject(s)
@@ -14,8 +15,34 @@ float sphere::testIntersection(glm::vec3 eye, glm::vec3 dir)
 	//see the book for a description of how to use the quadratic rule to solve
 	//for the intersection(s) of a line and a sphere, implement it here and
 	//return the minimum positive distance or 9999999 if none
+   auto discriminant = pow(glm::dot(dir, (eye - this->center)), 2)
+      - glm::dot(dir, dir)*(glm::dot(eye - this->center, eye - this->center)
+            - pow(this->radius, 2));
 
-	return 9999999;
+   if (discriminant <= 0) {
+      return 9999999;
+   } else {
+      auto sqrt_discriminant = sqrt(discriminant);
+      auto denom = glm::dot(dir, dir);
+      auto neg_b = glm::dot(-dir, (eye - this->center));
+      auto t_1 = (neg_b + sqrt_discriminant) / denom;
+      auto t_2 = (neg_b - sqrt_discriminant) / denom;
+      // if both positive, return lowest
+      if (t_1 >= 0 && t_2 >= 0) {
+         return (t_1 < t_2 ? t_1 : t_2);
+      }
+
+      // if one negative, return the positive one
+      if (t_1 < 0) {
+         if (t_2 >= 0) {
+            return t_2;
+         } else {
+            return 9999999;
+         }
+      } else {
+         return t_1;
+      }
+   }
 }
 
 glm::vec3 sphere::getNormal(glm::vec3 eye, glm::vec3 dir)
