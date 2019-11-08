@@ -6,6 +6,8 @@ psu id: xyz123
 
 #include <Project3.hpp>
 #include <omp.h>
+
+#define PI 3.14159265
 #define CLUSTER true
 
 
@@ -162,12 +164,15 @@ int main(int argc, char **argv)
 	glm::vec3 up = myScene->getUp();
 	float fovy = myScene->getFovy();
 
-	fovy = fovy * 3.1416 / 180;
+	fovy = fovy * PI / 180;
+   float distToImPlane = SCR_HEIGHT/(2*tan(fovy/2));
 
 	//get the direction we are looking
 	glm::vec3 dir = glm::normalize(lookAt - eye);
 	//cross up and dir to get a vector to our left
 	glm::vec3 left = glm::normalize(glm::cross(up, dir));
+   glm::vec3 right_cam_basis = -left;
+   auto base2 = glm::normalize(glm::cross(dir, right_cam_basis));
 
 	glm::vec3 currentColor;
 	// render loop
@@ -183,13 +188,21 @@ int main(int argc, char **argv)
 			// Go through 10 rows in parallel
 			for (int y = 0; y < SCR_HEIGHT; y++)
 			{
-				// This runs the following loop in parallel -- You can comment the next line out for debugging purposes 
 				#pragma omp parallel for schedule(dynamic)
 				for (int x = 0; x < SCR_WIDTH; x++)
 				{
 					glm::vec3 currentColor;
+               float x_ImagePlane = (int) -(SCR_WIDTH/2) + x + 0.5;
+               float y_ImagePlane = (int) -SCR_HEIGHT/2 + y + 0.5;
+               std::cout << "x_image " << x_ImagePlane << std::endl;
+               glm::vec3 currentDir = distToImPlane*dir + (x_ImagePlane * left)
+                  + (y_ImagePlane * base2);
+               //std::cout << "direction x: " << currentDir.x
+               //            << "direction y: " << currentDir.y
+               //            << "direction z: " << currentDir.z
+               //            << std::endl;
 					// Some code that just makes a green/red pattern
-					currentColor = glm::vec3(x % 255 / 255.0, y % 255 / 255.0, 0.0f);
+					// currentColor = glm::vec3(x % 255 / 255.0, y % 255 / 255.0, 0.0f);
 
 					// You will have to write this function in the scene class, 
                //    using recursive raytracing to determine color

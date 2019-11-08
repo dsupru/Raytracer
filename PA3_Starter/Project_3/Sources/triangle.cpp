@@ -57,8 +57,8 @@ float triangle::testIntersection(glm::vec3 eye, glm::vec3 dir) {
       return 9999999;
    }
 
-   glm::mat3 beta_numerator(x_ab, y_ab, z_ab,
-                              x_ae, y_ae, z_ae,
+   glm::mat3 beta_numerator(x_ae, y_ae, z_ae,
+                              x_ac, y_ac, z_ac,
                               dir.x, dir.y, dir.z);
    auto betta = getParameterVal(beta_numerator, A_determinant);
 
