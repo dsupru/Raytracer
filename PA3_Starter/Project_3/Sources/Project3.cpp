@@ -197,13 +197,6 @@ int main(int argc, char **argv)
                std::cout << "x_image " << x_ImagePlane << std::endl;
                glm::vec3 currentDir = distToImPlane*dir + (x_ImagePlane * left)
                   + (y_ImagePlane * base2);
-               //std::cout << "direction x: " << currentDir.x
-               //            << "direction y: " << currentDir.y
-               //            << "direction z: " << currentDir.z
-               //            << std::endl;
-					// Some code that just makes a green/red pattern
-					// currentColor = glm::vec3(x % 255 / 255.0, y % 255 / 255.0, 0.0f);
-
 					// You will have to write this function in the scene class, 
                //    using recursive raytracing to determine color
 					// Right here, you will need to determine the current direction "currentDir" 
