@@ -191,17 +191,22 @@ int main(int argc, char **argv)
 					// Some code that just makes a green/red pattern
 					currentColor = glm::vec3(x % 255 / 255.0, y % 255 / 255.0, 0.0f);
 
-					// You will have to write this function in the scene class, using recursive raytracing to determine color
-					//   Right here, you will need to determine the current direction "currentDir" based off what you know about projective geometry (Section 4.3)
-					//     You will need to compute the direction from the eye, to the place on the camera plane derived from the x and y coordinates and the lookat direction (Section 4.3.3) 
-					//     The eye is defined by the camera coordinates (above)
-					//   The ray is defined (using the line equation y=mx+b ... again) where m=the current direction and b= the eye. 
-					//currentColor = myScene->rayTrace(eye,currentDir,0);
+					// You will have to write this function in the scene class, 
+               //    using recursive raytracing to determine color
+					// Right here, you will need to determine the current direction "currentDir" 
+               //    based off what you know about projective geometry (Section 4.3)
+					// You will need to compute the direction from the eye, 
+               //    to the place on the camera plane 
+               //       derived from x and y coordinates and the lookat direction(Section 4.3.3) 
+					// The eye is defined by the camera coordinates (above)
+					// The ray is defined (using the line equation y=mx+b) 
+               //    where m=the current direction and b= the eye. 
+					currentColor = myScene->rayTrace(eye, currentDir, 0);
 
 					//Put the color into our image buffer.  
-					//  This first clamps the "currentColor" variable within a range of 0,1 which means min(max(x,0),1) 
+					//  This first clamps the "currentColor" within a range of 0,1 == min(max(x,0),1) 
 					//	so if all white or black, your colors are outside this range.
-					//  Then, this takes the float colors between 0 and 1 and makes them between [0,255], then coverts to uint8 through rounding.  
+					// Then, this maps [0, 1] -> [0,255], then coverts to uint8 through rounding.  
 					image[x + y*SCR_WIDTH] = glm::u8vec3(glm::clamp(currentColor,0.0f,1.0f)*255.0f);
 				}
 

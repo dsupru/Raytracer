@@ -10,11 +10,10 @@ sphere::sphere(glm::vec3 c, float r, int m, scene* s) : rtObject(s)
 	myScene = s;
 }
 
+//intersection(s) of a line and a sphere
+//return the minimum positive distance or 9999999 if none
 float sphere::testIntersection(glm::vec3 eye, glm::vec3 dir)
 {
-	//see the book for a description of how to use the quadratic rule to solve
-	//for the intersection(s) of a line and a sphere, implement it here and
-	//return the minimum positive distance or 9999999 if none
    float resultingD;
    auto discriminant = pow(glm::dot(dir, (eye - this->center)), 2)
       - glm::dot(dir, dir)*(glm::dot(eye - this->center, eye - this->center)
