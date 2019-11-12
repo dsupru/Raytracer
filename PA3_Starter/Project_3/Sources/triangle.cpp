@@ -1,7 +1,11 @@
 #include "triangle.h"
+#include "rtObject.h"
 
 //constructor given  center, radius, and material
-triangle::triangle(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, float tx0, float tx1, float tx2, float ty0, float ty1, float ty2, int m, scene* s) : rtObject(s)
+triangle::triangle(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, 
+      float tx0, float tx1, float tx2, float ty0, float ty1, float ty2, 
+      int m, scene* s) 
+   : rtObject(s)
 {
 	this->point0 = p0;
 	this->point1 = p1;
@@ -13,8 +17,8 @@ triangle::triangle(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, float tx0, float tx
 	this->texY0 = ty0;
 	this->texY1 = ty1;
 	this->texY2 = ty2;
-	matIndex = m;
-	myScene = s;
+	rtObject::matIndex = m;
+	rtObject::myScene = s;
 }
 
 float triangle::testIntersection(glm::vec3 eye, glm::vec3 dir) {
@@ -52,17 +56,17 @@ float triangle::testIntersection(glm::vec3 eye, glm::vec3 dir) {
    glm::mat3 gamma_numerator(x_ab, y_ab, z_ab,
                               x_ae, y_ae, z_ae,
                               dir.x, dir.y, dir.z);
-   auto gamma = getParameterVal(gamma_numerator, A_determinant);
-   if (gamma < 0 || gamma > 1) {
+   this->gamma = getParameterVal(gamma_numerator, A_determinant);
+   if (this->gamma < 0 || this->gamma > 1) {
       return 9999999;
    }
 
    glm::mat3 beta_numerator(x_ae, y_ae, z_ae,
                               x_ac, y_ac, z_ac,
                               dir.x, dir.y, dir.z);
-   auto betta = getParameterVal(beta_numerator, A_determinant);
+   this->betta = getParameterVal(beta_numerator, A_determinant);
 
-   if (betta < 0 || betta > 1 - gamma) {
+   if (this->betta < 0 || this->betta > 1 - gamma) {
       return 9999999;
    }
 
@@ -79,8 +83,8 @@ inline float triangle::getParameterVal(glm::mat3 parameter, const float A_determ
 glm::vec3 triangle::getNormal(glm::vec3 eye, glm::vec3 dir)
 {
 	//construct the barycentric coordinates for the plane
-	glm::vec3 bary1 = point1 - point0;
-	glm::vec3 bary2 = point2 - point0;
+	glm::vec3 bary1 = this->point1 - this->point0;
+	glm::vec3 bary2 = this->point2 - this->point0;
 
 	//cross them to get the normal to the plane
 	//note that the normal points in the direction given by right-hand rule
@@ -95,6 +99,6 @@ glm::vec2 triangle::getTextureCoords(glm::vec3 eye, glm::vec3 dir)
 	//use these in combination with the known texture surface location of the vertices
 	//to find the texture surface location of the point you are seeing
 
-	glm::vec3 coords;
+	glm::vec2 coords = glm::vec2(this->betta, this->gamma);
 	return coords;
 }

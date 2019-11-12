@@ -22,6 +22,8 @@ public:
 private:
 	//the points in 3d space that define the triangle
 	glm::vec3 point0, point1, point2;
+   float gamma = 0.0;
+   float betta = 0.0;
 	//the x-y locations on the texture image corresponding to each vertex
 	float texX0, texX1, texX2, 
          texY0, texY1, texY2;
