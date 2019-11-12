@@ -3,16 +3,16 @@
 //constructor given  center, radius, and material
 triangle::triangle(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, float tx0, float tx1, float tx2, float ty0, float ty1, float ty2, int m, scene* s) : rtObject(s)
 {
-	point0 = p0;
-	point1 = p1;
-	point2 = p2;
+	this->point0 = p0;
+	this->point1 = p1;
+	this->point2 = p2;
 
-	texX0 = tx0;
-	texX1 = tx1;
-	texX2 = tx2;
-	texY0 = ty0;
-	texY1 = ty1;
-	texY2 = ty2;
+	this->texX0 = tx0;
+	this->texX1 = tx1;
+	this->texX2 = tx2;
+	this->texY0 = ty0;
+	this->texY1 = ty1;
+	this->texY2 = ty2;
 	matIndex = m;
 	myScene = s;
 }
@@ -23,17 +23,17 @@ float triangle::testIntersection(glm::vec3 eye, glm::vec3 dir) {
 	//return the minimum distance (if barycentric coordinates indicate it hit
 	//the triangle) otherwise 9999999
    
-   const auto x_ab = point0.x - point2.x;
-   const auto x_ac = point0.x - point1.x;
-   const auto x_ae = point0.x - eye.x;
+   const auto x_ab = this->point0.x - this->point2.x;
+   const auto x_ac = this->point0.x - this->point1.x;
+   const auto x_ae = this->point0.x - eye.x;
 
-   const auto y_ab = point0.y - point2.y;
-   const auto y_ac = point0.y - point1.y;
-   const auto y_ae = point0.y - eye.y;
+   const auto y_ab = this->point0.y - this->point2.y;
+   const auto y_ac = this->point0.y - this->point1.y;
+   const auto y_ae = this->point0.y - eye.y;
 
-   const auto z_ab = point0.z - point2.z;
-   const auto z_ac = point0.z - point1.z;
-   const auto z_ae = point0.z - eye.z;
+   const auto z_ab = this->point0.z - this->point2.z;
+   const auto z_ac = this->point0.z - this->point1.z;
+   const auto z_ae = this->point0.z - eye.z;
 
    glm::mat3 A_matrix(x_ab, y_ab, z_ab,
                      x_ac, y_ac, z_ac,

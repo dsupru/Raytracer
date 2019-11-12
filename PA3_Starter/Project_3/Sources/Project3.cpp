@@ -1,7 +1,7 @@
 /*
-Project 3 Submission for CMPSC458
-Name: Joe Smith
-psu id: xyz123
+Project 3 intermediate 1 Submission for CMPSC458
+Name: Dmytro Suprun
+psu id: dxs427
 */
 
 #include <Project3.hpp>
