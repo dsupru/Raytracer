@@ -68,14 +68,14 @@ float triangle::testIntersection(glm::vec3 eye, glm::vec3 dir) {
       return 9999999;
    }
 
-   float gamma = (i*(ak - jb) + h*(jc - al) + g*(bl - kc)) / M;
-   if (gamma < 0 || gamma > 1) {
+   this->gamma = (i*(ak - jb) + h*(jc - al) + g*(bl - kc)) / M;
+   if (this->gamma < 0 || this->gamma > 1) {
       return 9999999;
    }
 
 
-   float betta = (j*(ei - hf) + k*(gf - di) + l*(dh - eg)) / M;
-   if (betta < 0 || betta > 1 - gamma) {
+   this->betta = (j*(ei - hf) + k*(gf - di) + l*(dh - eg)) / M;
+   if (this->betta < 0 || this->betta > 1 - this->gamma) {
       return 9999999;
    }
 
@@ -104,56 +104,12 @@ glm::vec3 triangle::getNormal(glm::vec3 eye, glm::vec3 dir)
 
 glm::vec2 triangle::getTextureCoords(glm::vec3 eye, glm::vec3 dir)
 {
-	//find alpha and beta (parametric distance along barycentric coordinates)
-	//use these in combination with the known texture surface location of the vertices
-	//to find the texture surface location of the point you are seeing
-   //
-   const auto a = this->point0.x - this->point1.x;
-   const auto b = this->point0.y - this->point1.y;
-   const auto c = this->point0.z - this->point1.z;
-
-   const auto j = this->point0.x - eye.x;
-   const auto k = this->point0.y - eye.y;
-   const auto l = this->point0.z - eye.z;
-
-   const auto d = this->point0.x - this->point2.x;
-   const auto e = this->point0.y - this->point2.y;
-   const auto f = this->point0.z - this->point2.z;
-
-   const auto g = dir.x;
-   const auto h = dir.y;
-   const auto i = dir.z;
-
-   const auto ei = e*i;
-   const auto hf = h*f;
-
-   const auto gf = g*f;
-   const auto di = d*i;
-
-   const auto dh = d*h;
-   const auto eg = e*g;
-
-   const auto ak = a*k;
-   const auto jb = j*b;
-
-   const auto jc = j*c;
-   const auto al = a*l;
-
-   const auto bl = b*l;
-   const auto kc = k*c;
-
-   float M = a*(ei - hf) + b*(gf - di) + c*(dh - eg);
-
-   float gamma = (i*(ak - jb) + h*(jc - al) + g*(bl - kc)) / M;
-
-   float betta = (j*(ei - hf) + k*(gf - di) + l*(dh - eg)) / M;
-
-   float alpha = 1.0 - betta - gamma;
+   float alpha = 1.0 - this->betta - this->gamma;
 //   if (alpha < 0) {
 //      alpha = 0.0;
 //   }
    auto coord = alpha*glm::vec2(texX0, texY0)
-      + betta*glm::vec2(texX1, texY1)
-      + gamma*glm::vec2(texX2, texY2);
+      + this->betta*glm::vec2(texX1, texY1)
+      + this->gamma*glm::vec2(texX2, texY2);
 	return coord;
 }
