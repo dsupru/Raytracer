@@ -24,7 +24,6 @@ glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth)
 	if (dist == 9999999)
 		return bgColor;
 
-   std::cout << "distance : " << dist << std::endl;
 	//get the material index and normal vector(at the point we saw) of the object we saw
 	int matIndex = myObjGroup->getClosest()->getMatIndex();
 	material * texture = &myMaterials.at(matIndex);
@@ -79,8 +78,8 @@ glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth)
 	//}
 
 	//multiply whatever color we have found by the texture color
-	//answer *= textureColor;
    answer += ambLight * texture->diffuseCol;
+	answer *= textureColor;
 
 	return answer;
 }

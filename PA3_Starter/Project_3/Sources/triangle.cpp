@@ -27,16 +27,16 @@ float triangle::testIntersection(glm::vec3 eye, glm::vec3 dir) {
 	//return the minimum distance (if barycentric coordinates indicate it hit
 	//the triangle) otherwise 9999999
    
-   const auto x_ab = this->point0.x - this->point2.x;
-   const auto x_ac = this->point0.x - this->point1.x;
+   const auto x_ab = this->point0.x - this->point1.x;
+   const auto x_ac = this->point0.x - this->point2.x;
    const auto x_ae = this->point0.x - eye.x;
 
-   const auto y_ab = this->point0.y - this->point2.y;
-   const auto y_ac = this->point0.y - this->point1.y;
+   const auto y_ab = this->point0.y - this->point1.y;
+   const auto y_ac = this->point0.y - this->point2.y;
    const auto y_ae = this->point0.y - eye.y;
 
-   const auto z_ab = this->point0.z - this->point2.z;
-   const auto z_ac = this->point0.z - this->point1.z;
+   const auto z_ab = this->point0.z - this->point1.z;
+   const auto z_ac = this->point0.z - this->point2.z;
    const auto z_ae = this->point0.z - eye.z;
 
    glm::mat3 A_matrix(x_ab, y_ab, z_ab,

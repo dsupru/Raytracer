@@ -7,5 +7,5 @@ rtObject::rtObject(scene* s)
 
 int rtObject::getMatIndex()
 {
-	return matIndex;
+	return this->matIndex;
 }

@@ -194,7 +194,6 @@ int main(int argc, char **argv)
 					glm::vec3 currentColor;
                float x_ImagePlane = (int) -(SCR_WIDTH/2) + x + 0.5;
                float y_ImagePlane = (int) -SCR_HEIGHT/2 + y + 0.5;
-               std::cout << "x_image " << x_ImagePlane << std::endl;
                glm::vec3 currentDir = distToImPlane*dir + (x_ImagePlane * left)
                   + (y_ImagePlane * base2);
 					// You will have to write this function in the scene class, 
