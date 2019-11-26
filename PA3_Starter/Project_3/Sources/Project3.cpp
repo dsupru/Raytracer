@@ -193,7 +193,7 @@ int main(int argc, char **argv)
 					glm::vec3 currentColor;
                float x_ImagePlane = (int) -(SCR_WIDTH/2) + x + 0.5;
                float y_ImagePlane = (int) -SCR_HEIGHT/2 + y + 0.5;
-               glm::vec3 currentDir = distToImPlane*dir + (x_ImagePlane * left)
+               glm::vec3 currentDir = distToImPlane*dir + (x_ImagePlane * right_cam_basis)
                   + (y_ImagePlane * base2);
 					// You will have to write this function in the scene class, 
                //    using recursive raytracing to determine color
