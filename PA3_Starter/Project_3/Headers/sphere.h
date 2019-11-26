@@ -19,4 +19,8 @@ public:
 private:
 	glm::vec3 center;
 	float radius;
+   // keep track of both int. points
+   float t_1 = 0.0;
+   float t_2 = 0.0;
+   glm::vec3 normal;
 };
