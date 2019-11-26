@@ -7,7 +7,6 @@ psu id: dxs427
 #include <Project3.hpp>
 #include <omp.h>
 
-#define PI 3.14159265
 #define CLUSTER true
 
 
@@ -164,7 +163,7 @@ int main(int argc, char **argv)
 	glm::vec3 up = myScene->getUp();
 	float fovy = myScene->getFovy();
 
-	fovy = fovy * PI / 180;
+	fovy = fovy * M_PI / 180;
    float distToImPlane = SCR_HEIGHT/(2*tan(fovy/2));
 
 	//get the direction we are looking

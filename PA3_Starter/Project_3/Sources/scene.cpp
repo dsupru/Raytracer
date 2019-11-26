@@ -40,7 +40,6 @@ glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth)
 	{
 		//if there is a texture image, ask the object for the image coordinates (between 0 and 1)
 		glm::vec2 coords = myObjGroup->getClosest()->getTextureCoords(eye, dir);
-
 		//get the color from that image location
 		
 		int x = (int)(texture->width*coords.x);

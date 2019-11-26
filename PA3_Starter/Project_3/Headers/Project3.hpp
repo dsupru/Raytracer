@@ -22,7 +22,6 @@
 #include <math.h>      
 
 
-# define M_PI           3.14159265358979323846  /* pi */
 
 // Reference: https://github.com/nothings/stb/blob/master/stb_image.h#L4
 // To use stb_image, add this in *one* C++ source file.
