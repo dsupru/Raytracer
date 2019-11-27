@@ -197,14 +197,6 @@ int main(int argc, char **argv)
                   + (y_ImagePlane * base2);
 					// You will have to write this function in the scene class, 
                //    using recursive raytracing to determine color
-					// Right here, you will need to determine the current direction "currentDir" 
-               //    based off what you know about projective geometry (Section 4.3)
-					// You will need to compute the direction from the eye, 
-               //    to the place on the camera plane 
-               //       derived from x and y coordinates and the lookat direction(Section 4.3.3) 
-					// The eye is defined by the camera coordinates (above)
-					// The ray is defined (using the line equation y=mx+b) 
-               //    where m=the current direction and b= the eye. 
 					currentColor = myScene->rayTrace(eye, currentDir, 0);
 
 					//Put the color into our image buffer.  
