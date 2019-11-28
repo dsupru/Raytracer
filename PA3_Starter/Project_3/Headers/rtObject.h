@@ -15,6 +15,7 @@ class rtObject
 public:
 	//virtual class so constructor is unusable
 	rtObject(scene* s);
+   const float MIN_PRECISION = 5.0e-5;
 
 	//returns the distance to the object from the eye
 	//or 9999999 if no intersection

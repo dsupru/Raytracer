@@ -1,6 +1,5 @@
 #include "sphere.h"
 #include <math.h>
-#define MIN_PRECISION 5.0e-5
 //constructor given  center, radius, and material
 sphere::sphere(glm::vec3 c, float r, int m, scene* s) : rtObject(s)
 {
@@ -19,7 +18,7 @@ float sphere::testIntersection(glm::vec3 eye, glm::vec3 dir)
    auto discriminant = pow(glm::dot(dir, eyeMcenter), 2)
       - glm::dot(dir, dir)*(glm::dot(eyeMcenter, eyeMcenter) - pow(this->radius, 2));
 
-   if (discriminant < MIN_PRECISION) {
+   if (discriminant < rtObject::MIN_PRECISION) {
       resultingD = 9999999;
    } else {
       auto sqrt_discriminant = sqrt(discriminant);
@@ -29,11 +28,11 @@ float sphere::testIntersection(glm::vec3 eye, glm::vec3 dir)
       auto t_1 = (neg_b + sqrt_discriminant) / denom;
       auto t_2 = (neg_b - sqrt_discriminant) / denom;
       // if both positive, return lowest
-      if (t_1 >= MIN_PRECISION && t_2 >= MIN_PRECISION) {
+      if (t_1 >= rtObject::MIN_PRECISION && t_2 >= rtObject::MIN_PRECISION) {
          resultingD = (t_1 < t_2 ? t_1 : t_2);
       // if one negative, return the positive one
-      } else if (t_1 < MIN_PRECISION) {
-         if (t_2 >= MIN_PRECISION) {
+      } else if (t_1 < rtObject::MIN_PRECISION) {
+         if (t_2 >= rtObject::MIN_PRECISION) {
             resultingD = t_2;
          } else {
             // both negative
