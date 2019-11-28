@@ -52,9 +52,12 @@ glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth) {
    auto point_on_surf = dist*dir + eye;
    for (const auto light : this->myLights) {
       auto l = light.position - point_on_surf;
+      auto h = glm::normalize(l + eye - point_on_surf);
       l = glm::normalize(l);
       auto diffusedLight = light.color*texture->diffuseCol*std::max(0.0f, glm::dot(normal, l));
       answer += diffusedLight; 
+      auto specularLight = light.color*texture->specularCol* (float)pow(glm::dot(h, normal), 32);
+      answer += specularLight;
    }
 
 	//if the light can see the surface point,
