@@ -64,7 +64,7 @@ float triangle::testIntersection(glm::vec3 eye, glm::vec3 dir) {
    float M = a*(ei - hf) + b*(gf - di) + c*(dh - eg);
    float t = -(f*(ak - jb) + e*(jc - al) + d*(bl - kc))/ M;
 
-   if (t < 0 || t > 1) {
+   if (t < 0) {
       return 9999999;
    }
 

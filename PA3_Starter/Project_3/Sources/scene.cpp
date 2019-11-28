@@ -53,11 +53,14 @@ glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth) {
    for (const auto light : this->myLights) {
       auto l = glm::normalize(light.position - pointOnSurf);
       auto view = glm::normalize(eye - pointOnSurf);
+      //if the light can see the surface point, it doesn't hit anything on its way
       if (myObjGroup->testIntersections(pointOnSurf, l) == 9999999) {
          auto h = glm::normalize(l + view);
          auto diffusedLight = light.color*texture->diffuseCol*std::max(0.0f, glm::dot(normal, l));
+         //add its diffuse color to a total diffuse for the point (using our illumination model)
          answer += diffusedLight;
          auto specularLight = light.color*texture->specularCol* (float)pow(glm::dot(h, normal), 62);
+         // same for specular
          answer += specularLight;
       }
    }
