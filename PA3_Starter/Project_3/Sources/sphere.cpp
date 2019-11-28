@@ -64,34 +64,16 @@ glm::vec3 sphere::getNormal(glm::vec3 eye, glm::vec3 dir)
 glm::vec2 sphere::getTextureCoords(glm::vec3 eye, glm::vec3 dir)
 {
 	//find the normal as in getNormal
-   auto normal = getNormal(eye, dir);
-
-	//use these to find spherical coordinates
-	glm::vec3 x(1, 0, 0);
-	glm::vec3 z(0, 0, 1);
-
-	//phi is the angle down from z
-	//theta is the angle from x curving toward y
-	//hint: angle between two vectors is the acos() of the dot product
-
-	//find phi using normal and z
-   float phy = acos(glm::dot(normal, z));
-
-	//find the x-y projection of the normal
-
-	//find theta using the x-y projection and x
-   glm::vec3 xyProjection(0, 0, 0);
-   xyProjection.x = normal.x;
-   xyProjection.y = normal.y;
-   float theta = acos(glm::dot(xyProjection, x));
-
-	//if x-y projection is in quadrant 3 or 4, then theta=2*PI-theta
-   if (xyProjection.y < 0) {
-      theta = 2*M_PI - theta;
+   auto gl_surfaceLocation = testIntersection(eye, dir)*dir + eye;
+   auto surfaceLocation = gl_surfaceLocation - this->center;
+   float s = acos(surfaceLocation.z/this->radius)/M_PI;
+   float t_clammped = surfaceLocation.x/(this->radius*sin(M_PI*s));
+   t_clammped = glm::clamp(t_clammped, -1.0f, 1.0f);
+   float t = acos(t_clammped);
+   if (surfaceLocation.y < 0) {
+      t = 2*M_PI - t;
    }
-
-	//return coordinates scaled to be between 0 and 1
-	glm::vec2 coords(theta/(2*M_PI), phy/(M_PI));
+   glm::vec2 coords(t/(2*M_PI), s);
 	glm::clamp(coords, 0.0f, 1.0f);
 	return coords;
 }
