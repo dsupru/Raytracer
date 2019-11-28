@@ -65,20 +65,27 @@ glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth) {
       }
    }
 
-	//if the light can see the surface point,
-	//add its diffuse color to a total diffuse for the point (using our illumination model)
-	//use testIntersection to help decide this
-
 	//add the diffuse light times the accumulated diffuse light to our answer
 
 	//put a limit on the depth of recursion
-	//if (recurseDepth<3)
-	//{
-	//reflect our view across the normal
-	//recusively raytrace from the surface point along the reflected view
-	//add the color seen times the reflective color
+	if (recurseDepth > 0) {
+      auto dirDotNormal = glm::dot(dir, normal);
+      auto pointOffset = pointOnSurf + normal*0.001f;
+      //reflect our view across the normal
+      auto recursed_color = rayTrace(pointOffset, dir - 2.0f*(dirDotNormal*normal), recurseDepth-1);
+      //recusively raytrace from the surface point along the reflected view
+      //add the color seen times the reflective color
+      answer += texture->reflectiveCol*recursed_color;
 
+      auto entryAngle = (dirDotNormal < 0) ? acos(glm::normalize(glm::dot(dir, -normal)))
+         : acos(glm::normalize(dirDotNormal));
+      auto exitAngle = (dirDotNormal < 0) ? entryAngle * texture->refractionIndex
+         : entryAngle/texture->refractionIndex;
 
+      auto refrDir = (dir + normal * cos(entryAngle))/texture->refractionIndex - normal*cos(exitAngle);
+      auto refractedColor = rayTrace(pointOnSurf + -normal*0.001f, refrDir, recurseDepth-1);
+      answer += texture->transparentCol*refractedColor;
+   }
 
 	//if going into material (dot prod of dir and normal is negative), bend toward normal
 	//find entry angle using inverse cos of dot product of dir and -normal
