@@ -1,4 +1,5 @@
 #include "scene.h"
+#include <algorithm>
 #include <iostream>
 
 scene::scene(const char* filename)
@@ -13,8 +14,7 @@ scene::scene(const char* filename)
 	std::cout << std::endl;
 }
 
-glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth)
-{
+glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth) {
 	//start with black, add color as we go
 	glm::vec3 answer(0.0f);
 
@@ -32,12 +32,11 @@ glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth)
 	//determine texture color
 	glm::vec3 textureColor;
 
-	if (!texture->image)
+	if (!texture->image) {
 		//this is multiplicative, rather than additive
 		//so if there is no texture, just use ones
 		textureColor = glm::vec3(1.0f);
-	else
-	{
+   } else {
 		//if there is a texture image, ask the object for the image coordinates (between 0 and 1)
 		glm::vec2 coords = myObjGroup->getClosest()->getTextureCoords(eye, dir);
 		//get the color from that image location
@@ -48,8 +47,15 @@ glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth)
 	}
 
 	//add diffuse color times ambient light to our answer
+   answer += ambLight*texture->diffuseCol;
 
-	//iterate through all lights
+   auto point_on_surf = dist*dir + eye;
+   for (const auto light : this->myLights) {
+      auto l = light.position - point_on_surf;
+      l = glm::normalize(l);
+      auto diffusedLight = light.color*texture->diffuseCol*std::max(0.0f, glm::dot(normal, l));
+      answer += diffusedLight; 
+   }
 
 	//if the light can see the surface point,
 	//add its diffuse color to a total diffuse for the point (using our illumination model)
@@ -77,7 +83,6 @@ glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth)
 	//}
 
 	//multiply whatever color we have found by the texture color
-   answer += ambLight * texture->diffuseCol;
 	answer *= textureColor;
 
 	return answer;

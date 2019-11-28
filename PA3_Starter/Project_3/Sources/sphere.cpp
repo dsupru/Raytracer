@@ -47,8 +47,7 @@ float sphere::testIntersection(glm::vec3 eye, glm::vec3 dir)
    return resultingD;
 }
 
-glm::vec3 sphere::getNormal(glm::vec3 eye, glm::vec3 dir)
-{
+glm::vec3 sphere::getNormal(glm::vec3 eye, glm::vec3 dir) {
 	//once you can test for intersection,
 	//simply add (distance * view direction) to the eye location to get surface location,
 	//then subtract the center location of the sphere to get the normal out from the sphere
@@ -61,9 +60,8 @@ glm::vec3 sphere::getNormal(glm::vec3 eye, glm::vec3 dir)
 	return local_normal;
 }
 
-glm::vec2 sphere::getTextureCoords(glm::vec3 eye, glm::vec3 dir)
-{
-	//find the normal as in getNormal
+glm::vec2 sphere::getTextureCoords(glm::vec3 eye, glm::vec3 dir) {
+   // use the surface location to calculate texture offset
    auto gl_surfaceLocation = testIntersection(eye, dir)*dir + eye;
    auto surfaceLocation = gl_surfaceLocation - this->center;
    float s = acos(surfaceLocation.z/this->radius)/M_PI;
