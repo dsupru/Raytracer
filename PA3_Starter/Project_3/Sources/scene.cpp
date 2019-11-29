@@ -14,7 +14,7 @@ scene::scene(const char* filename)
 	std::cout << std::endl;
 }
 
-glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth) {
+glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth, scene::RefractionIndices index) {
 	//start with black, add color as we go
 	glm::vec3 answer(0.0f);
 
@@ -72,18 +72,24 @@ glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth) {
       auto dirDotNormal = glm::dot(dir, normal);
       auto pointOffset = pointOnSurf + normal*0.001f;
       //reflect our view across the normal
-      auto recursed_color = rayTrace(pointOffset, dir - 2.0f*(dirDotNormal*normal), recurseDepth-1);
+      auto recursed_color = rayTrace(pointOffset, dir - 2.0f*(dirDotNormal*normal), recurseDepth-1, index);
       //recusively raytrace from the surface point along the reflected view
       //add the color seen times the reflective color
       answer += texture->reflectiveCol*recursed_color;
 
-      auto entryAngle = (dirDotNormal < 0) ? acos(glm::normalize(glm::dot(dir, -normal)))
-         : acos(glm::normalize(dirDotNormal));
+      // formula from 13.1 in textbook
+      auto entryAngle = (dirDotNormal < 0) ? acos((glm::dot(glm::normalize(-pointOnSurf), -normal)))
+         : acos((glm::dot(glm::normalize(pointOnSurf), normal)));
       auto exitAngle = (dirDotNormal < 0) ? entryAngle * texture->refractionIndex
          : entryAngle/texture->refractionIndex;
 
-      auto refrDir = (dir + normal * cos(entryAngle))/texture->refractionIndex - normal*cos(exitAngle);
-      auto refractedColor = rayTrace(pointOnSurf + -normal*0.001f, refrDir, recurseDepth-1);
+      float refrRatio = index.en/index.ex;
+      auto refrDir = 
+         -refrRatio*(-pointOnSurf)
+         -(cos(exitAngle) - refrRatio*cos(entryAngle))*normal;
+      auto refractedColor = rayTrace(pointOnSurf + -normal*0.001f,
+            (refrDir), recurseDepth-1,
+            {index.ex, texture->refractionIndex});
       answer += texture->transparentCol*refractedColor;
    }
 

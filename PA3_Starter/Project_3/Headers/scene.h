@@ -22,9 +22,12 @@ class triangle;
 // For parsing purposes
 #define MAX_PARSER_TOKEN_LENGTH 100
 
-class scene
-{
+class scene {
 public:
+   struct RefractionIndices {
+      float en;
+      float ex;
+   };
 	//constructor from a scene text file
 	scene(const char* filename);
 	//accessors for the camera properties
@@ -34,7 +37,10 @@ public:
 	float getFovy();
 
 	//returns the rgb color seen from this eye in this direction
-	glm::vec3 rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth);
+	glm::vec3 rayTrace(glm::vec3 eye,
+         glm::vec3 dir, 
+         int recurseDepth,
+         RefractionIndices index);
 
 	//destructor
 	~scene();
