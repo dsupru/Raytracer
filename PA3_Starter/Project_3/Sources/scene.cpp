@@ -72,21 +72,17 @@ glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth, scene:
       auto dirDotNormal = glm::dot(dir, normal);
       auto pointOffset = pointOnSurf + normal*0.001f;
       //reflect our view across the normal
-      auto recursed_color = rayTrace(pointOffset, dir - 2.0f*(dirDotNormal*normal), recurseDepth-1, index);
+      auto recursed_color = rayTrace(pointOffset, glm::normalize(dir - 2.0f*(dirDotNormal*normal)), recurseDepth-1, index);
       //recusively raytrace from the surface point along the reflected view
       //add the color seen times the reflective color
       answer += texture->reflectiveCol*recursed_color;
 
       // formula from 13.1 in textbook
-      auto entryAngle = (dirDotNormal < 0) ? acos((glm::dot(glm::normalize(-pointOnSurf), -normal)))
-         : acos((glm::dot(glm::normalize(pointOnSurf), normal)));
-      auto exitAngle = (dirDotNormal < 0) ? entryAngle * texture->refractionIndex
-         : entryAngle/texture->refractionIndex;
-
       float refrRatio = index.en/index.ex;
-      auto refrDir = 
-         -refrRatio*(-pointOnSurf)
-         -(cos(exitAngle) - refrRatio*cos(entryAngle))*normal;
+      auto refrDir = refrRatio
+         *(dir - normal*glm::dot(-dir, normal))
+         -normal*(sqrt(1 - pow(refrRatio, 2.0f)*(1-pow((glm::dot(-dir, normal)),2.0f))));
+
       auto refractedColor = rayTrace(pointOnSurf + -normal*0.001f,
             (refrDir), recurseDepth-1,
             {index.ex, texture->refractionIndex});
