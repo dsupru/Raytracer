@@ -59,7 +59,7 @@ glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth, scene:
          auto diffusedLight = light.color*texture->diffuseCol*std::max(0.0f, glm::dot(normal, l));
          //add its diffuse color to a total diffuse for the point (using our illumination model)
          answer += diffusedLight;
-         auto specularLight = light.color*texture->specularCol* (float)pow(glm::dot(h, normal), 62);
+         auto specularLight = light.color*texture->specularCol* (float)pow(glm::dot(normal, h), texture->shininess);
          // same for specular
          answer += specularLight;
       }

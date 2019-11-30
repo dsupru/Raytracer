@@ -197,7 +197,7 @@ int main(int argc, char **argv)
                   + (y_ImagePlane * base2);
 					// You will have to write this function in the scene class, 
                //    using recursive raytracing to determine color
-					currentColor = myScene->rayTrace(eye, currentDir, 3,
+					currentColor = myScene->rayTrace(eye, currentDir, 5,
                      {1.0f, 1.0f});
 
 					//Put the color into our image buffer.  
