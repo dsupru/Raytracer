@@ -13,5 +13,4 @@ The program input methods are the same.
 - twoMirrorsOnAnotherMirror.ray
 - mirrorOnABoard.ray
 
-It was previously the case that the precise changes needed to be specified.
-Just in case, I am also including a git diff file that lists those.
+Since it wasn't specified, I didn't start to count&list line numbers that I changed.
