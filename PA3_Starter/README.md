@@ -9,6 +9,9 @@ I implemented formulas from the book, spending days on trying to get it to work 
 
 I made changes to scene.cpp, .hpp, triangle and sphere classes.
 The program input methods are the same.
+2 new ray files are:
+- twoMirrorsOnAnotherMirror.ray
+- mirrorOnABoard.ray
 
 It was previously the case that the precise changes needed to be specified.
 Just in case, I am also including a git diff file that lists those.
