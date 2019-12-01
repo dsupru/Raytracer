@@ -195,15 +195,9 @@ int main(int argc, char **argv)
                float y_ImagePlane = (int) -SCR_HEIGHT/2 + y + 0.5;
                glm::vec3 currentDir = distToImPlane*dir + (x_ImagePlane * right_cam_basis)
                   + (y_ImagePlane * base2);
-					// You will have to write this function in the scene class, 
-               //    using recursive raytracing to determine color
 					currentColor = myScene->rayTrace(eye, currentDir, 5,
                      {1.0f, 1.0f});
 
-					//Put the color into our image buffer.  
-					//  This first clamps the "currentColor" within a range of 0,1 == min(max(x,0),1) 
-					//	so if all white or black, your colors are outside this range.
-					// Then, this maps [0, 1] -> [0,255], then coverts to uint8 through rounding.  
 					image[x + y*SCR_WIDTH] = glm::u8vec3(glm::clamp(currentColor,0.0f,1.0f)*255.0f);
 				}
 
@@ -221,7 +215,7 @@ int main(int argc, char **argv)
 
 
 					// Draw the textrue
-					glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
+					glClearColor(1.0f, 1.0f, 1.0f, 1.0f); 
 					glClear(GL_COLOR_BUFFER_BIT);
 					// Bind our texture we are creating
 					glBindTexture(GL_TEXTURE_2D, textureColorbuffer);

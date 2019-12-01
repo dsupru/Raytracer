@@ -59,7 +59,7 @@ glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth, scene:
          auto diffusedLight = light.color*texture->diffuseCol*std::max(0.0f, glm::dot(normal, l));
          //add its diffuse color to a total diffuse for the point (using our illumination model)
          answer += diffusedLight;
-         auto specularLight = light.color*texture->specularCol* (float)pow(glm::dot(normal, h), texture->shininess);
+         auto specularLight = light.color*texture->specularCol* (float)pow(glm::dot(h, normal), texture->shininess);
          // same for specular
          answer += specularLight;
       }
@@ -78,26 +78,20 @@ glm::vec3 scene::rayTrace(glm::vec3 eye, glm::vec3 dir, int recurseDepth, scene:
       answer += texture->reflectiveCol*recursed_color;
 
       // formula from 13.1 in textbook
+      // modified for negative dot product
       float refrRatio = index.en/index.ex;
       auto refrDir = refrRatio
-         *(dir - normal*glm::dot(-dir, normal))
-         -normal*(sqrt(1 - pow(refrRatio, 2.0f)*(1-pow((glm::dot(-dir, normal)),2.0f))));
+         *(dir + normal*dirDotNormal)
+         -normal*(sqrt(1 - pow(refrRatio, 2.0f)*(1-pow(dirDotNormal,2.0f))));
 
+      // new eye at the intersection plus slight offset
+      // new direction is the refrDir
+      // exit refraction index is now the initial index.
       auto refractedColor = rayTrace(pointOnSurf + -normal*0.001f,
-            (refrDir), recurseDepth-1,
+            refrDir, recurseDepth-1,
             {index.ex, texture->refractionIndex});
       answer += texture->transparentCol*refractedColor;
    }
-
-	//if going into material (dot prod of dir and normal is negative), bend toward normal
-	//find entry angle using inverse cos of dot product of dir and -normal
-	//multiply entry angle by index of refraction to get exit angle
-	//else, bend away
-	//find entry angle using inverse cos of dot product of dir and normal
-	//divide entry angle by index of refraction to get exit angle
-	//recursively raytrace from the other side of the object along the new direction
-	//add the color seen times the transparent color
-	//}
 
 	//multiply whatever color we have found by the texture color
 	answer *= textureColor;
