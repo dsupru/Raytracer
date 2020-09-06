@@ -5,7 +5,6 @@ psu id: dxs427
 */
 
 #include <Project3.hpp>
-#include <omp.h>
 
 #define CLUSTER true
 
